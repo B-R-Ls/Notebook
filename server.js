@@ -3,6 +3,7 @@ const path = require('path');
 const notedata = require('./db/db.json');
 const fs = require('fs');
 const util = require('util');
+const { v4: uuidv4 } = require('uuid');
 // const api = require('./public/assets/js/index')
 
 const readFromFile = util.promisify(fs.readFile);
@@ -47,7 +48,8 @@ app.get('/api/notes', (req, res) =>
 );
 
 app.post('/api/notes', (req, res) => {
-  const newNote = req.body
+  let newNote = req.body;
+  newNote.id = uuidv4();
   console.log(newNote);
   readAndAppend(newNote, './db/db.json');
   readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)))
